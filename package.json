@@ -1,0 +1,25 @@
+{
+  "name": "smartcrop-pakistan",
+  "version": "1.0.0",
+  "description": "AI-Powered Precision Agriculture Platform for Pakistani Farmers",
+  "scripts": {
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && python demo_app.py",
+    "frontend": "cd mobile-app && npm start",
+    "install:all": "npm install && cd mobile-app && npm install",
+    "dev": "concurrently -n \"API,APP\" -c \"green,blue\" \"npm run backend\" \"npm run frontend\""
+  },
+  "keywords": [
+    "agriculture",
+    "ai",
+    "pakistan",
+    "precision-farming",
+    "satellite",
+    "machine-learning"
+  ],
+  "author": "SmartCrop Pakistan Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.Python
+venv/
+env/
+.env
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+*.log
+*.sqlite3
+*.db
+
+# React Native
+mobile-app/node_modules/
+mobile-app/.expo/
+mobile-app/android/app/build/
+mobile-app/ios/Pods/
+*.jks
+*.keystore
+
+# ML Models (large files)
+ml_models/
+*.onnx
+*.pkl
+*.pt
+*.pth
+*.h5
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Temp
+*.tmp
+*.temp
+.cache/
