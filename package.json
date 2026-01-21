@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "AI-Powered Precision Agriculture Platform for Pakistani Farmers",
   "scripts": {
-    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "start": "concurrently \"npm run backend\" \"npm run web\"",
     "backend": "cd backend && python demo_app.py",
-    "frontend": "cd mobile-app && npm start",
+    "web": "cd frontend && npx serve -l 3000",
+    "mobile": "cd mobile-app && npm start",
     "install:all": "npm install && cd mobile-app && npm install",
-    "dev": "concurrently -n \"API,APP\" -c \"green,blue\" \"npm run backend\" \"npm run frontend\""
+    "dev": "concurrently -n \"API,WEB\" -c \"green,blue\" \"npm run backend\" \"npm run web\""
   },
   "keywords": [
     "agriculture",
@@ -21,5 +22,8 @@
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "serve": "^14.2.5"
   }
 }

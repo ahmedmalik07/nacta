@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCrop Pakistan - ذہین کاشتکاری</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #1a5c1a 0%, #2E7D32 50%, #4CAF50 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        
+        .farms-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .farm-card {
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .farm-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .farm-info p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .health-score {
+            background: #FFD700;
+            color: #1a5c1a;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .health-score.good { background: #4CAF50; color: white; }
+        .health-score.moderate { background: #FF9800; color: white; }
+        .health-score.critical { background: #f44336; color: white; }
+        
+        .ai-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .chat-container {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            padding: 12px 18px;
+            border-radius: 18px;
+            margin: 10px 0;
+            max-width: 80%;
+        }
+        
+        .message.user {
+            background: #FFD700;
+            color: #1a5c1a;
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .message.ai {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            direction: rtl;
+        }
+        
+        button {
+            background: #FFD700;
+            color: #1a5c1a;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .suggestion {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .suggestion:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .api-status {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 8px;
+        }
+        
+        .status-dot.online { background: #4CAF50; }
+        .status-dot.offline { background: #f44336; }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .loading-text {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌾 SmartCrop Pakistan</h1>
+            <p class="subtitle">ذہین کاشتکاری، بہتر پیداوار | AI-Powered Precision Agriculture</p>
+            <div class="api-status">
+                <span id="apiStatus">Checking API...</span>
+                <span class="status-dot" id="statusDot"></span>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalFarms">-</div>
+                <div class="stat-label">کل کھیت | Total Farms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgHealth">-</div>
+                <div class="stat-label">اوسط صحت | Avg Health Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalArea">-</div>
+                <div class="stat-label">کل رقبہ (ایکڑ) | Total Area</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgNdvi">-</div>
+                <div class="stat-label">اوسط NDVI | Vegetation Index</div>
+            </div>
+        </div>
+
+        <div class="farms-section">
+            <h2 class="section-title">🌱 میرے کھیت | My Farms</h2>
+            <div id="farmsList">
+                <div class="loading">
+                    <p class="loading-text">Loading farms... کھیتوں کی فہرست لوڈ ہو رہی ہے</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="ai-section">
+            <h2 class="section-title">🤖 AI ایجنٹ سے بات کریں | Chat with AI Agent</h2>
+            <div class="chat-container" id="chatContainer">
+                <div class="message ai">
+                    السلام علیکم! میں آپ کا زرعی مشیر ہوں۔ آپ اردو یا انگریزی میں سوال پوچھ سکتے ہیں۔
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" id="userInput" placeholder="اپنا سوال لکھیں... Type your question...">
+                <button onclick="sendMessage()">بھیجیں</button>
+            </div>
+            <div class="suggestions">
+                <span class="suggestion" onclick="askQuestion('میری فصل کو پانی کب دوں؟')">میری فصل کو پانی کب دوں؟</span>
+                <span class="suggestion" onclick="askQuestion('کھاد کتنی لگائیں؟')">کھاد کتنی لگائیں؟</span>
+                <span class="suggestion" onclick="askQuestion('فصل کی صحت کیسی ہے؟')">فصل کی صحت کیسی ہے؟</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        
+        // Check API status
+        async function checkApiStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                if (response.ok) {
+                    document.getElementById('apiStatus').textContent = 'API Online';
+                    document.getElementById('statusDot').className = 'status-dot online';
+                    loadFarms();
+                } else {
+                    throw new Error('API not responding');
+                }
+            } catch (error) {
+                document.getElementById('apiStatus').textContent = 'API Offline - Start backend first';
+                document.getElementById('statusDot').className = 'status-dot offline';
+            }
+        }
+        
+        // Load farms
+        async function loadFarms() {
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/farms`);
+                const farms = await response.json();
+                
+                // Update stats
+                document.getElementById('totalFarms').textContent = farms.length;
+                document.getElementById('avgHealth').textContent = 
+                    (farms.reduce((a, f) => a + f.health_score, 0) / farms.length).toFixed(1);
+                document.getElementById('totalArea').textContent = 
+                    farms.reduce((a, f) => a + f.area_acres, 0).toFixed(1);
+                document.getElementById('avgNdvi').textContent = 
+                    (farms.reduce((a, f) => a + f.ndvi, 0) / farms.length).toFixed(2);
+                
+                // Render farms
+                const farmsList = document.getElementById('farmsList');
+                farmsList.innerHTML = farms.map(farm => `
+                    <div class="farm-card">
+                        <div class="farm-info">
+                            <h3>${farm.name}</h3>
+                            <p>${farm.name_en} | ${farm.area_acres} ایکڑ | ${farm.crop}</p>
+                            <p>📍 ${farm.district}, ${farm.province}</p>
+                        </div>
+                        <div class="health-score ${getHealthClass(farm.health_score)}">
+                            ${farm.health_score.toFixed(0)}%
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                document.getElementById('farmsList').innerHTML = 
+                    '<p>Could not load farms. Make sure API is running.</p>';
+            }
+        }
+        
+        function getHealthClass(score) {
+            if (score >= 70) return 'good';
+            if (score >= 50) return 'moderate';
+            return 'critical';
+        }
+        
+        // AI Chat
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            const chatContainer = document.getElementById('chatContainer');
+            
+            // Add user message
+            chatContainer.innerHTML += `<div class="message user">${message}</div>`;
+            input.value = '';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/agent/query?message=${encodeURIComponent(message)}&language=ur`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                chatContainer.innerHTML += `
+                    <div class="message ai">
+                        ${data.response_urdu}<br><br>
+                        <small style="opacity: 0.7">${data.response_english}</small>
+                    </div>
+                `;
+            } catch (error) {
+                chatContainer.innerHTML += `
+                    <div class="message ai">
+                        معذرت، جواب نہیں مل سکا۔ براہ کرم دوبارہ کوشش کریں۔
+                    </div>
+                `;
+            }
+            
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function askQuestion(question) {
+            document.getElementById('userInput').value = question;
+            sendMessage();
+        }
+        
+        // Enter key support
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // Initialize
+        checkApiStatus();
+    </script>
+</body>
+</html>
